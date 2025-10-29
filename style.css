@@ -1,0 +1,138 @@
+body {
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(135deg, #a8c0ff, #3f2b96);
+  color: #333;
+  text-align: center;
+  padding: 40px;
+}
+
+h1 {
+  color: #fff;
+  font-size: 2em;
+  margin-bottom: 25px;
+  letter-spacing: 1px;
+}
+
+.form-card {
+  background: #fff;
+  padding: 25px;
+  margin: auto;
+  width: 380px;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  text-align: left;
+  transition: all 0.3s ease;
+}
+
+.form-card:hover {
+  transform: translateY(-3px);
+}
+
+label {
+  font-weight: 600;
+  color: #333;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: #5a3ccf;
+  outline: none;
+  box-shadow: 0 0 5px rgba(63, 43, 150, 0.4);
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background: #3f2b96;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background: #5a3ccf;
+}
+
+table {
+  width: 95%;
+  margin: 20px auto;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  font-size: 14px;
+  border: none;
+}
+
+thead {
+  background: #3f2b96;
+  color: #fff;
+}
+
+/* Table Cells */
+th, td {
+  padding: 14px 16px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+th:first-child,
+td:first-child {
+  border-left: none;
+}
+
+th:last-child,
+td:last-child {
+  border-right: none;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+tr:nth-child(even) {
+  background: #f8f9ff;
+}
+
+tr:hover {
+  background: #e7e9ff;
+  transition: background 0.2s ease-in-out;
+}
+
+
+a.delete {
+  color: #d9534f;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+a.delete:hover {
+  text-decoration: underline;
+}
+
+.alert {
+  padding: 10px;
+  margin: 15px auto;
+  width: 60%;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.success { background: #e0f9e4; color: #008f2b; }
+.danger { background: #fce4e4; color: #b00000; }
+.error  { background: #fff3cd; color: #856404; }
