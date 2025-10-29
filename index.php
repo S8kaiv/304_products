@@ -1,4 +1,12 @@
 <?php
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit;
+}
+?>
+
+<?php
 require 'db.php';
 
 $errors = [];
@@ -97,96 +105,116 @@ $products = $pdo->query("SELECT * FROM products ORDER BY id DESC")->fetchAll();
     </style>
 </head>
 <body>
-    <h1>Product Inventory Management</h1>
 
-    <?php if (isset($_GET['success'])): ?>
-        <?php if ($_GET['success'] === 'add'): ?>
-            <p class="alert success">Product added successfully!</p>
-        <?php elseif ($_GET['success'] === 'update'): ?>
-            <p class="alert success">Product updated successfully!</p>
-        <?php elseif ($_GET['success'] === 'delete'): ?>
-            <p class="alert danger">Product deleted successfully!</p>
-        <?php endif; ?>
-    <?php endif; ?>
-
-    <?php if (!empty($errors)): ?>
-        <div class="alert error">
-            <ul>
-                <?php foreach ($errors as $e): ?>
-                    <li><?= htmlspecialchars($e) ?></li>
-                <?php endforeach; ?>
-            </ul>
+    <nav class="navbar">
+        <div class="nav-left">
+            <h2>Product Management</h2>
         </div>
-    <?php endif; ?>
 
-    <form method="post" class="form-card">
-        <label>Product Name:</label>
-        <input type="text" name="name" required>
+        <button class="nav-toggle" onclick="toggleMenu()">☰</button>
 
-        <label>Category:</label>
-        <select name="category" required>
-            <option value="">Select Category</option>
-            <option value="Electronics">Electronics</option>
-            <option value="Clothing">Clothing</option>
-            <option value="Home & Kitchen">Home & Kitchen</option>
-            <option value="Sports">Sports</option>
-            <option value="Books">Books</option>
-        </select>
+        <div class="nav-right" id="navMenu">
+            <span>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?></span>
+            <a href="logout.php" class="logout-btn">Logout</a>
+        </div>
+    </nav>
 
-        <label>Price:</label>
-        <input type="number" step="0.01" name="price" required>
+    <script>
+        function toggleMenu() {
+            document.getElementById("navMenu").classList.toggle("show");
+        }
+    </script>
 
-        <label>Stock:</label>
-        <input type="number" name="stock" required>
+    <main>
+        <?php if (isset($_GET['success'])): ?>
+            <?php if ($_GET['success'] === 'add'): ?>
+                <p class="alert success">Product added successfully!</p>
+            <?php elseif ($_GET['success'] === 'update'): ?>
+                <p class="alert success">Product updated successfully!</p>
+            <?php elseif ($_GET['success'] === 'delete'): ?>
+                <p class="alert danger">Product deleted successfully!</p>
+            <?php endif; ?>
+        <?php endif; ?>
 
-        <label>Supplier:</label>
-        <input type="text" name="supplier" required>
+        <?php if (!empty($errors)): ?>
+            <div class="alert error">
+                <ul>
+                    <?php foreach ($errors as $e): ?>
+                        <li><?= htmlspecialchars($e) ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endif; ?>
 
-        <label>Description:</label>
-        <textarea name="description" rows="3"></textarea>
+        <form method="post" class="form-card">
+            <label>Product Name:</label>
+            <input type="text" name="name" required>
 
-        <button type="submit" name="add">Add Product</button>
-    </form>
+            <label>Category:</label>
+            <select name="category" required>
+                <option value="">Select Category</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Clothing">Clothing</option>
+                <option value="Home & Kitchen">Home & Kitchen</option>
+                <option value="Sports">Sports</option>
+                <option value="Books">Books</option>
+            </select>
 
-    <h2>Product List</h2>
-    <?php if (empty($products)): ?>
-        <p>No products available.</p>
-    <?php else: ?>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th><th>Name</th><th>Category</th><th>Price</th>
-                    <th>Stock</th><th>Supplier</th><th>Description</th><th>Created At</th><th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($products as $p): ?>
+            <label>Price:</label>
+            <input type="number" step="0.01" name="price" required>
+
+            <label>Stock:</label>
+            <input type="number" name="stock" required>
+
+            <label>Supplier:</label>
+            <input type="text" name="supplier" required>
+
+            <label>Description:</label>
+            <textarea name="description" rows="3"></textarea>
+
+            <button type="submit" name="add">Add Product</button>
+        </form>
+
+        <h2>Product List</h2>
+        <?php if (empty($products)): ?>
+            <p>No products available.</p>
+        <?php else: ?>
+            <table>
+                <thead>
                     <tr>
-                        <td><?= $p['id'] ?></td>
-                        <td><?= htmlspecialchars($p['name']) ?></td>
-                        <td><?= htmlspecialchars($p['category']) ?></td>
-                        <td>₱<?= number_format($p['price'], 2) ?></td>
-                        <td><?= $p['stock'] ?></td>
-                        <td><?= htmlspecialchars($p['supplier']) ?></td>
-                        <td><?= htmlspecialchars($p['description']) ?></td>
-                        <td><?= $p['created_at'] ?></td>
-                        <td>
-                            <a href="#" 
-                               class="edit-btn" 
-                               data-id="<?= $p['id'] ?>"
-                               data-name="<?= htmlspecialchars($p['name']) ?>"
-                               data-category="<?= htmlspecialchars($p['category']) ?>"
-                               data-price="<?= $p['price'] ?>"
-                               data-stock="<?= $p['stock'] ?>"
-                               data-supplier="<?= htmlspecialchars($p['supplier']) ?>"
-                               data-description="<?= htmlspecialchars($p['description']) ?>">✏️ Edit</a> |
-                            <a href="index.php?delete=<?= $p['id'] ?>" class="delete" onclick="return confirm('Are you sure you want to delete this product?')">🗑 Delete</a>
-                        </td>
+                        <th>ID</th><th>Name</th><th>Category</th><th>Price</th>
+                        <th>Stock</th><th>Supplier</th><th>Description</th><th>Created At</th><th>Action</th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    <?php endif; ?>
+                </thead>
+                <tbody>
+                    <?php foreach ($products as $p): ?>
+                        <tr>
+                            <td><?= $p['id'] ?></td>
+                            <td><?= htmlspecialchars($p['name']) ?></td>
+                            <td><?= htmlspecialchars($p['category']) ?></td>
+                            <td>₱<?= number_format($p['price'], 2) ?></td>
+                            <td><?= $p['stock'] ?></td>
+                            <td><?= htmlspecialchars($p['supplier']) ?></td>
+                            <td><?= htmlspecialchars($p['description']) ?></td>
+                            <td><?= $p['created_at'] ?></td>
+                            <td>
+                                <a href="#" 
+                                class="edit-btn" 
+                                data-id="<?= $p['id'] ?>"
+                                data-name="<?= htmlspecialchars($p['name']) ?>"
+                                data-category="<?= htmlspecialchars($p['category']) ?>"
+                                data-price="<?= $p['price'] ?>"
+                                data-stock="<?= $p['stock'] ?>"
+                                data-supplier="<?= htmlspecialchars($p['supplier']) ?>"
+                                data-description="<?= htmlspecialchars($p['description']) ?>">✏️ Edit</a> |
+                                <a href="index.php?delete=<?= $p['id'] ?>" class="delete" onclick="return confirm('Are you sure you want to delete this product?')">🗑 Delete</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php endif; ?>
+    </main>
 
     <div class="modal" id="editModal">
         <div class="modal-content">
@@ -270,5 +298,6 @@ $products = $pdo->query("SELECT * FROM products ORDER BY id DESC")->fetchAll();
         if (e.target == modal) closeModal();
     };
     </script>
+
 </body>
 </html>
